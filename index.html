@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元素决战 - 回合制卡牌对战</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/shop.css">
+    <link rel="stylesheet" href="css/battle.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- 主菜单界面 -->
+    <div id="main-menu" class="screen active">
+        <div class="menu-container">
+            <h1 class="game-title">元素决战</h1>
+            <p class="game-subtitle">回合制卡牌对战</p>
+            <div class="menu-buttons">
+                <button class="btn btn-primary" onclick="Game.startPVE()">PVE 冒险</button>
+                <button class="btn btn-secondary" onclick="Game.startPVP()">PVP 对战</button>
+                <button class="btn btn-shop" onclick="Game.openShop()">黑市商店</button>
+                <button class="btn btn-inventory" onclick="Game.openInventory()">卡牌背包</button>
+            </div>
+            <div class="player-info">
+                <span class="gold">💰 <span id="player-gold">500</span></span>
+                <span class="level">⭐ Lv.<span id="player-level">1</span></span>
+                <span class="exp">✨ EXP: <span id="player-exp">0</span>/<span id="player-exp-max">100</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 黑市商店界面 -->
+    <div id="shop-screen" class="screen">
+        <div class="shop-container">
+            <div class="shop-header">
+                <h2>🏪 黑市商店</h2>
+                <div class="shop-info">
+                    <span class="refresh-timer">下次刷新: <span id="refresh-timer">--:--:--</span></span>
+                    <span class="gold">💰 <span id="shop-gold">500</span></span>
+                </div>
+                <button class="btn btn-back" onclick="Game.backToMenu()">返回</button>
+            </div>
+            <div id="shop-cards" class="cards-grid">
+                <!-- 商店卡片将通过JS动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 卡牌背包界面 -->
+    <div id="inventory-screen" class="screen">
+        <div class="inventory-container">
+            <div class="inventory-header">
+                <h2>📦 卡牌背包</h2>
+                <div class="inventory-filters">
+                    <button class="filter-btn active" onclick="Inventory.filter('all')">全部</button>
+                    <button class="filter-btn" onclick="Inventory.filter('battle')">战斗技能</button>
+                    <button class="filter-btn" onclick="Inventory.filter('support')">附加技能</button>
+                    <button class="filter-btn" onclick="Inventory.filter('hero')">英雄</button>
+                </div>
+                <button class="btn btn-back" onclick="Game.backToMenu()">返回</button>
+            </div>
+            <div id="inventory-cards" class="cards-grid">
+                <!-- 背包卡片将通过JS动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 战斗准备界面 -->
+    <div id="battle-prep-screen" class="screen">
+        <div class="battle-prep-container">
+            <h2>⚔️ 战斗准备</h2>
+            <div class="hero-selection">
+                <h3>选择英雄卡片（可选）</h3>
+                <div id="hero-cards" class="cards-grid small">
+                    <!-- 英雄卡片选择 -->
+                </div>
+            </div>
+            <div class="deck-selection">
+                <h3>选择战斗技能卡片（最多6张）</h3>
+                <div id="deck-cards" class="cards-grid small">
+                    <!-- 战斗技能卡片选择 -->
+                </div>
+            </div>
+            <div class="selected-info">
+                <p>已选英雄: <span id="selected-hero">无</span></p>
+                <p>已选技能: <span id="selected-skills">0</span>/6</p>
+            </div>
+            <div class="prep-buttons">
+                <button class="btn btn-primary" onclick="Battle.startBattle()">开始战斗</button>
+                <button class="btn btn-back" onclick="Game.backToMenu()">返回</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 战斗界面 -->
+    <div id="battle-screen" class="screen">
+        <div class="battle-container">
+            <!-- 敌方区域 -->
+            <div class="enemy-area">
+                <div class="enemy-info">
+                    <h3 id="enemy-name">敌人</h3>
+                    <div class="health-bar">
+                        <div id="enemy-health-bar" class="health-fill" style="width: 100%"></div>
+                        <span id="enemy-health-text">100/100</span>
+                    </div>
+                </div>
+                <div id="enemy-cards" class="battle-cards">
+                    <!-- 敌方出牌区域 -->
+                </div>
+            </div>
+
+            <!-- 战斗信息区域 -->
+            <div class="battle-info">
+                <div class="turn-info">
+                    <span id="turn-number">回合 1</span>
+                    <span id="skill-points">技能点: <span id="current-sp">0</span></span>
+                </div>
+                <div id="battle-log" class="battle-log">
+                    <!-- 战斗日志 -->
+                </div>
+            </div>
+
+            <!-- 玩家区域 -->
+            <div class="player-area">
+                <div class="player-battle-info">
+                    <div class="health-bar">
+                        <div id="player-health-bar" class="health-fill" style="width: 100%"></div>
+                        <span id="player-health-text">100/100</span>
+                    </div>
+                    <h3 id="player-name">玩家</h3>
+                </div>
+                <div id="player-cards" class="battle-cards">
+                    <!-- 玩家手牌区域 -->
+                </div>
+                <div class="battle-actions">
+                    <button class="btn btn-action" id="btn-roll-sp" onclick="Battle.rollSkillPoints()">🎲 投掷技能点</button>
+                    <button class="btn btn-action" id="btn-end-turn" onclick="Battle.endTurn()">⏭ 结束回合</button>
+                    <button class="btn btn-action" id="btn-accumulate" onclick="Battle.accumulateSP()" style="display:none">📈 累积技能点</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 战斗结算界面 -->
+    <div id="battle-result-screen" class="screen">
+        <div class="result-container">
+            <h2 id="result-title">战斗结束</h2>
+            <div class="result-rewards">
+                <p>获得经验: <span id="reward-exp">0</span></p>
+                <p>获得金币: <span id="reward-gold">0</span></p>
+                <div id="reward-card" class="reward-card">
+                    <!-- 奖励卡片 -->
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="Game.backToMenu()">返回主菜单</button>
+        </div>
+    </div>
+
+    <!-- 卡牌详情弹窗 -->
+    <div id="card-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="UI.closeModal()">&times;</span>
+            <div id="card-detail">
+                <!-- 卡牌详情内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知提示 -->
+    <div id="notification" class="notification"></div>
+
+    <!-- 加载JS文件 -->
+    <script src="js/data.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/battle.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

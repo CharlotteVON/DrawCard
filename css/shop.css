@@ -1,0 +1,273 @@
+/* 商店特殊样式 */
+.shop-container {
+    position: relative;
+}
+
+.shop-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(255, 0, 0, 0.1), transparent 50%);
+    pointer-events: none;
+    border-radius: 15px;
+}
+
+/* 商店卡片特殊效果 */
+.shop-card {
+    position: relative;
+}
+
+.shop-card.sold {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.shop-card.sold::after {
+    content: '已售出';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--danger-color);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+/* 首次商店特殊提示 */
+.first-shop-banner {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 107, 107, 0.2));
+    border: 2px solid var(--gold-color);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: pulse 2s infinite;
+}
+
+.first-shop-banner h3 {
+    color: var(--gold-color);
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.first-shop-banner p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+}
+
+/* 刷新按钮 */
+.refresh-btn {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.refresh-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+}
+
+.refresh-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.refresh-btn .refresh-icon {
+    font-size: 18px;
+    animation: spin 2s linear infinite;
+}
+
+.refresh-btn:disabled .refresh-icon {
+    animation: none;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 商店空状态 */
+.shop-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+}
+
+.shop-empty .empty-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.shop-empty h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.shop-empty p {
+    font-size: 16px;
+}
+
+/* 购买确认弹窗 */
+.purchase-confirm {
+    text-align: center;
+}
+
+.purchase-confirm .confirm-card {
+    margin: 20px 0;
+}
+
+.purchase-confirm .confirm-price {
+    font-size: 24px;
+    color: var(--gold-color);
+    margin: 15px 0;
+}
+
+.purchase-confirm .confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.purchase-confirm .btn-confirm {
+    background: var(--success-color);
+    color: white;
+    padding: 10px 30px;
+}
+
+.purchase-confirm .btn-cancel {
+    background: var(--danger-color);
+    color: white;
+    padding: 10px 30px;
+}
+
+/* 商店倒计时 */
+.shop-timer {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.shop-timer .timer-icon {
+    font-size: 20px;
+}
+
+.shop-timer .timer-text {
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.shop-timer .timer-value {
+    color: var(--gold-color);
+    font-weight: bold;
+}
+
+/* 商店提示 */
+.shop-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.shop-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: var(--text-primary);
+    text-align: center;
+    border-radius: 8px;
+    padding: 10px;
+    position: absolute;
+    z-index: 100;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
+.shop-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 商店品质标签 */
+.quality-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.quality-tag.white {
+    background: var(--quality-white);
+    color: #333;
+}
+
+.quality-tag.green {
+    background: var(--quality-green);
+    color: white;
+}
+
+.quality-tag.purple {
+    background: var(--quality-purple);
+    color: white;
+}
+
+.quality-tag.gold {
+    background: var(--quality-gold);
+    color: #333;
+}
+
+.quality-tag.red {
+    background: var(--quality-red);
+    color: white;
+}
+
+/* 商店动画 */
+@keyframes shopCardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.shop-card {
+    animation: shopCardAppear 0.5s ease forwards;
+}
+
+.shop-card:nth-child(1) { animation-delay: 0.1s; }
+.shop-card:nth-child(2) { animation-delay: 0.2s; }
+.shop-card:nth-child(3) { animation-delay: 0.3s; }
+.shop-card:nth-child(4) { animation-delay: 0.4s; }
+.shop-card:nth-child(5) { animation-delay: 0.5s; }
